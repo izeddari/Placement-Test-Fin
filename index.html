@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>English Placement Test</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1F3A5F; --text:#1d2430; --muted:#5b6676; --paper:#FBFCFD; --panel:#ffffff;
+  --line:#d6dee7; --wash:#E8EEF4; --sign:#F2C94C; --sign-ink:#2a2200;
+  --ok:#2E7D5B; --ok-bg:#e3f2ea; --bad:#B3403A; --bad-bg:#f8e6e4; --focus:#3b7bd4;
+  --ui:"Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --read:"Source Serif 4", Georgia, "Times New Roman", serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ink:#9fc0e8; --text:#e6ebf2; --muted:#9aa6b6; --paper:#121821; --panel:#1a2230;
+    --line:#2d3a4d; --wash:#202b3b; --sign:#d9b23f; --sign-ink:#1e1800;
+    --ok:#6fcf9f; --ok-bg:#183326; --bad:#ef8a83; --bad-bg:#3a1f1d; --focus:#7fb0ff;
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#9fc0e8; --text:#e6ebf2; --muted:#9aa6b6; --paper:#121821; --panel:#1a2230;
+  --line:#2d3a4d; --wash:#202b3b; --sign:#d9b23f; --sign-ink:#1e1800;
+  --ok:#6fcf9f; --ok-bg:#183326; --bad:#ef8a83; --bad-bg:#3a1f1d; --focus:#7fb0ff;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 90px)}
+body{margin:0;background:var(--paper);color:var(--text);font-family:var(--ui);font-size:17px;line-height:1.5}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:760px;margin:0 auto;padding:0 20px}
+
+/* top bar */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;align-items:center;gap:16px;padding-top:12px;padding-bottom:12px}
+.bar h1{font-size:1rem;margin:0;color:var(--ink);white-space:nowrap}
+.meter{flex:1;height:8px;background:var(--wash);border-radius:4px;overflow:hidden}
+.meter span{display:block;height:100%;background:var(--ink);width:0;transition:width .3s}
+.count{font-size:.9rem;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+
+/* start */
+.start{padding:56px 0 40px}
+.start h2{font-family:var(--read);font-size:2.4rem;line-height:1.15;margin:0 0 16px;color:var(--ink);font-weight:700}
+.start p{max-width:60ch;color:var(--muted);margin:0 0 12px}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:28px 0}
+.facts div{border-left:3px solid var(--ink);padding:4px 12px}
+.facts b{display:block;font-size:1.4rem;color:var(--ink)}
+.facts small{color:var(--muted)}
+label.field{display:block;font-weight:700;margin:24px 0 6px}
+input[type=text]{width:100%;max-width:380px;padding:12px 14px;border:1px solid var(--line);border-radius:6px;background:var(--panel)}
+
+.btn{display:inline-block;border:0;border-radius:6px;padding:12px 22px;font-weight:700;cursor:pointer;background:var(--ink);color:var(--paper)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:20px}
+
+/* sections */
+.tabs{display:flex;gap:6px;overflow-x:auto;padding:16px 0 4px}
+.tabs button{flex:none;border:1px solid var(--line);background:var(--panel);border-radius:20px;padding:6px 12px;font-size:.85rem;cursor:pointer;color:var(--muted)}
+.tabs button[aria-current="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.tabs button.done:not([aria-current="true"]){color:var(--ink);border-color:var(--ink)}
+.part{font-size:.9rem;color:var(--muted);margin:24px 0 2px}
+.sec h2{font-family:var(--read);font-size:1.7rem;margin:0 0 6px;color:var(--ink)}
+.instr{color:var(--muted);margin:0 0 24px}
+
+.passage{font-family:var(--read);font-size:1.1rem;line-height:1.75;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:20px 24px;margin-bottom:28px}
+.passage h3{margin:0 0 8px;font-size:1.25rem}
+.passage p{margin:0 0 12px}
+.passage p:last-child{margin:0}
+.gap{display:inline-block;min-width:90px;border:0;border-bottom:2px solid var(--ink);background:var(--wash);padding:0 8px;border-radius:3px 3px 0 0;font-family:var(--ui);font-size:.95rem;cursor:pointer;color:var(--ink);text-align:center}
+.gap .n{font-weight:700;margin-right:4px;opacity:.7}
+
+.q{padding:18px 0;border-top:1px solid var(--line)}
+.q:first-of-type{border-top:0}
+.qhead{display:flex;gap:12px;align-items:flex-start;margin-bottom:10px}
+.qnum{flex:none;width:34px;height:34px;border-radius:50%;background:var(--wash);color:var(--ink);font-weight:700;display:grid;place-items:center;font-size:.9rem}
+.q.answered .qnum{background:var(--ink);color:var(--paper)}
+.stem{padding-top:5px;font-family:var(--read);font-size:1.08rem}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-left:46px}
+.opt{position:relative}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt label{display:flex;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:6px;background:var(--panel);cursor:pointer;min-height:46px}
+.opt label .l{flex:none;width:24px;height:24px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-size:.8rem;font-weight:700;color:var(--muted)}
+.opt input:checked + label{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.opt input:checked + label .l{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.opt input:focus-visible + label{outline:3px solid var(--focus);outline-offset:2px}
+
+/* notice signs — the one bold element */
+.sign{display:inline-block;background:var(--sign);color:var(--sign-ink);border:3px solid var(--sign-ink);border-radius:4px;padding:14px 20px;margin:4px 0 14px 46px;font-family:var(--ui);font-weight:700;text-align:center;line-height:1.35;box-shadow:4px 4px 0 var(--sign-ink);max-width:calc(100% - 56px)}
+.sign.caps{letter-spacing:.04em}
+
+.nav{display:flex;justify-content:space-between;gap:12px;margin:32px 0 60px;flex-wrap:wrap}
+
+/* review states */
+.review .opt label{cursor:default}
+.opt.right label{border-color:var(--ok);background:var(--ok-bg)}
+.opt.right label .l{background:var(--ok);border-color:var(--ok);color:var(--paper)}
+.opt.wrong label{border-color:var(--bad);background:var(--bad-bg)}
+.opt.wrong label .l{background:var(--bad);border-color:var(--bad);color:var(--paper)}
+
+/* results */
+.result{padding:44px 0 20px}
+.level{display:flex;align-items:baseline;gap:20px;flex-wrap:wrap;margin:8px 0 20px}
+.level .cefr{font-family:var(--read);font-size:5rem;line-height:1;font-weight:700;color:var(--ink)}
+.level .score{font-size:1.2rem}
+.level .score b{font-size:1.6rem}
+.scale{overflow-x:auto;margin:24px 0}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:.95rem}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:700}
+tr.me td{background:var(--wash);font-weight:700}
+.note{color:var(--muted);font-size:.92rem;max-width:62ch}
+[hidden]{display:none!important}
+
+/* start form */
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0 16px;max-width:600px}
+.fields input{max-width:none}
+.err{color:var(--bad);font-weight:700;margin:12px 0 0}
+
+/* submission status */
+.sent{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 14px;border-radius:6px;margin:0 0 20px;font-size:.95rem}
+.sent.ok{background:var(--ok-bg);color:var(--ok)}
+.sent.bad{background:var(--bad-bg);color:var(--bad)}
+.sent.wait{background:var(--wash);color:var(--muted)}
+.sent .btn{padding:6px 14px;font-size:.9rem}
+
+/* admin */
+.admin{padding:32px 0 60px}
+.admin h2{font-family:var(--read);font-size:2rem;margin:0 0 6px;color:var(--ink)}
+.admin .bar2{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:20px 0}
+.admin .bar2 input,.admin .bar2 select{padding:9px 12px;border:1px solid var(--line);border-radius:6px;background:var(--panel);font:inherit;color:inherit}
+.admin .bar2 input{flex:1;min-width:180px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:10px;margin:20px 0}
+.stats div{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.stats b{display:block;font-size:1.5rem;color:var(--ink);font-variant-numeric:tabular-nums}
+.stats small{color:var(--muted)}
+.results{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:8px}
+.results table{min-width:680px}
+.results th button{all:unset;cursor:pointer;color:var(--muted);font-weight:700}
+.results th button:focus-visible{outline:3px solid var(--focus)}
+.results td.num{font-variant-numeric:tabular-nums}
+.results tbody tr{cursor:pointer}
+.results tbody tr:hover td{background:var(--wash)}
+.pill{display:inline-block;min-width:34px;text-align:center;padding:2px 8px;border-radius:12px;background:var(--ink);color:var(--paper);font-weight:700;font-size:.85rem}
+.detail td{background:var(--wash);cursor:default}
+.grid60{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:4px;margin:6px 0}
+.grid60 span{font-size:.8rem;padding:3px 6px;border-radius:4px;text-align:center;font-variant-numeric:tabular-nums}
+.grid60 .r{background:var(--ok-bg);color:var(--ok)}
+.grid60 .w{background:var(--bad-bg);color:var(--bad)}
+.grid60 .b{background:var(--panel);color:var(--muted);border:1px dashed var(--line)}
+body.is-admin .wrap{max-width:1100px}
+@media print{.bar,.admin .bar2,.admin .row{display:none}}
+@media (max-width:540px){
+  .opts{margin-left:0}
+  .sign{margin-left:0;max-width:100%}
+  .start h2{font-size:1.9rem}
+  .bar h1{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap">
+    <h1>English Placement Test</h1>
+    <div class="meter" aria-hidden="true"><span id="meter"></span></div>
+    <div class="count" id="count">0 / 60 answered</div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section id="startView" class="start">
+    <h2>Find your English level</h2>
+    <p>This test has 60 multiple-choice questions in two parts. Choose the answer that fits best. If you don't know an answer, leave it and come back later — only answered questions count.</p>
+    <p>At the end you'll see your score, your level on the Common European Framework (A1–C2), and which course and exams match it.</p>
+    <div class="facts">
+      <div><b>60</b><small>questions</small></div>
+      <div><b>2</b><small>parts</small></div>
+      <div><b>30–40</b><small>minutes, roughly</small></div>
+    </div>
+    <div class="fields">
+      <div>
+        <label class="field" for="name">Your name</label>
+        <input type="text" id="name" autocomplete="name" placeholder="First and last name">
+      </div>
+      <div>
+        <label class="field" for="email">Email or phone</label>
+        <input type="text" id="email" autocomplete="email" placeholder="So your teacher can contact you">
+      </div>
+      <div>
+        <label class="field" for="group">Class or group <span style="font-weight:400;color:var(--muted)">(if you have one)</span></label>
+        <input type="text" id="group" placeholder="e.g. Evening group, GC1">
+      </div>
+    </div>
+    <p class="err" id="startErr" hidden>Please write your name before you start.</p>
+    <div class="row">
+      <button class="btn" id="beginBtn">Start the test</button>
+      <button class="btn ghost" id="resumeBtn" hidden>Continue where I left off</button>
+    </div>
+  </section>
+
+  <section id="testView" hidden>
+    <nav class="tabs" id="tabs" aria-label="Test sections"></nav>
+    <div id="secHost"></div>
+    <div class="nav">
+      <button class="btn ghost" id="prevBtn">Previous section</button>
+      <button class="btn" id="nextBtn">Next section</button>
+    </div>
+  </section>
+
+  <section id="resultView" hidden></section>
+
+  <section id="adminView" class="admin" hidden></section>
+</main>
+
+<script>
+/* ============================================================
+   SETTINGS — paste your Apps Script web app URL between the quotes.
+   (Deploy > Manage deployments > Web app URL, ends with /exec)
+   ============================================================ */
+const API_URL = "PASTE_YOUR_WEB_APP_URL_HERE";
+
+const L = ["A","B","C","D"];
+
+const SECTIONS = [
+ {part:1, title:"Notices", range:[1,5],
+  instr:"Where can you see these notices? Choose A, B or C.",
+  qs:[
+   {sign:"Please leave your room key at Reception.", o:["in a shop","in a hotel","in a taxi"]},
+   {sign:"Foreign money changed here", o:["in a library","in a bank","in a police station"]},
+   {sign:"AFTERNOON SHOW<br>BEGINS AT 2PM", caps:true, o:["outside a theatre","outside a supermarket","outside a restaurant"]},
+   {sign:"CLOSED FOR HOLIDAYS<br>Lessons start again on the 8th January", o:["at a travel agent's","at a music school","at a restaurant"]},
+   {sign:"Price per night:<br>£10 a tent<br>£5 a person", o:["at a cinema","in a hotel","on a camp-site"]}
+  ]},
+ {part:1, title:"Scotland", range:[6,10],
+  instr:"Choose the word which best fits each space in the text. Choose A, B or C.",
+  passage:`<h3>Scotland</h3><p>Scotland is the north part of the island of Great Britain. The Atlantic Ocean is on the west and the North Sea on the east. Some people {6} Scotland speak a different language called Gaelic.</p><p>There are {7} five million people in Scotland, and Edinburgh is {8} most famous city.</p><p>Scotland has many mountains; the highest one is called 'Ben Nevis'. In the south of Scotland, there are a lot of sheep. A long time ago, there {9} many forests, but now there are only a {10}.</p><p>Scotland is only a small country, but it is quite beautiful.</p>`,
+  qs:[{o:["on","in","at"]},{o:["about","between","among"]},{o:["his","your","its"]},{o:["is","were","was"]},{o:["few","little","lot"]}]},
+ {part:1, title:"Alice Guy Blaché", range:[11,15],
+  instr:"Choose the word which best fits each space in the text. Choose A, B, C or D.",
+  passage:`<h3>Alice Guy Blaché</h3><p>Alice Guy Blaché was the first female film director. She first became involved in cinema whilst working for the Gaumont Film Company in the late 1890s. This was a period of great change in the cinema and Alice was the first to use many new inventions, {11} sound and colour.</p><p>In 1907 Alice {12} to New York where she started her own film company. She was {13} successful, but, when Hollywood became the centre of the film world, the best days of the independent New York film companies were {14}. When Alice died in 1968, hardly anybody {15} her name.</p>`,
+  qs:[{o:["bringing","including","containing","supporting"]},{o:["moved","ran","entered","transported"]},{o:["next","once","immediately","recently"]},{o:["after","down","behind","over"]},{o:["remembered","realised","reminded","repeated"]}]},
+ {part:1, title:"UFOs", range:[16,20],
+  instr:"Choose the word which best fits each space in the text. Choose A, B, C or D.",
+  passage:`<h3>UFOs – do they exist?</h3><p>UFO is short for 'unidentified flying object'. UFOs are popularly known as flying saucers, {16} that is often the {17} they are reported to be. The {18} "flying saucers" were seen in 1947 by an American pilot, but experts who studied his claim decided it had been a trick of the light.</p><p>Even people experienced at watching the sky, {19} as pilots, report seeing UFOs. In 1978 a pilot reported a collection of UFOs off the coast of New Zealand. A television {20} went up with the pilot and filmed the UFOs. Scientists studying this phenomenon later discovered that in this case they were simply lights on boats out fishing.</p>`,
+  qs:[{o:["because","therefore","although","so"]},{o:["look","shape","size","type"]},{o:["last","next","first","oldest"]},{o:["like","that","so","such"]},{o:["cameraman","director","actor","announcer"]}]},
+ {part:1, title:"Sentences", range:[21,40],
+  instr:"Choose the word or phrase which best completes each sentence. Choose A, B, C or D.",
+  qs:[
+   {s:"The teacher encouraged her students ___ to an English pen-friend.",o:["should write","write","wrote","to write"]},
+   {s:"They spent a lot of time ___ at the pictures in the museum.",o:["looking","for looking","to look","to looking"]},
+   {s:"Shirley enjoys science lessons, but all her experiments seem to ___ wrong.",o:["turn","come","end","go"]},
+   {s:"___ from Michael, all the group arrived on time.",o:["Except","Other","Besides","Apart"]},
+   {s:"She ___ her neighbour's children for the broken window.",o:["accused","complained","blamed","denied"]},
+   {s:"As I had missed the history lesson, my friend went ___ the homework with me.",o:["by","after","over","on"]},
+   {s:"Whether she's a good actress or not is a ___ of opinion.",o:["matter","subject","point","case"]},
+   {s:"The decorated roof of the ancient palace was ___ up by four thin columns.",o:["built","carried","held","supported"]},
+   {s:"Would it ___ you if we came on Thursday?",o:["agree","suit","like","fit"]},
+   {s:"This form ___ be handed in until the end of the week.",o:["doesn't need","doesn't have","needn't","hasn't got"]},
+   {s:"If you make a mistake when you are writing, just ___ it out with your pen.",o:["cross","clear","do","wipe"]},
+   {s:"Although our opinions on many things ___, we're good friends.",o:["differ","oppose","disagree","divide"]},
+   {s:"This product must be eaten ___ two days of purchase.",o:["by","before","within","under"]},
+   {s:"The newspaper report contained ___ important information.",o:["many","another","an","a lot of"]},
+   {s:"Have you considered ___ to London?",o:["move","to move","to be moving","moving"]},
+   {s:"It can be a good idea for people who lead an active life to increase their ___ of vitamins.",o:["upturn","input","upkeep","intake"]},
+   {s:"I thought there was a ___ of jealousy in his reaction to my good fortune.",o:["piece","part","shadow","touch"]},
+   {s:"Why didn't you ___ that you were feeling ill?",o:["advise","mention","remark","tell"]},
+   {s:"James was not sure exactly where his best interests ___.",o:["stood","rested","lay","centred"]},
+   {s:"He's still getting ___ the shock of losing his job.",o:["across","by","over","through"]}
+  ]},
+ {part:2, title:"Skyscrapers", range:[41,45],
+  instr:"Choose the word or phrase which best fits each space in the text. Choose A, B, C or D.",
+  passage:`<h3>The tallest buildings – skyscrapers</h3><p>Nowadays, skyscrapers can be found in most major cities of the world. A building which was many {41} high was first called a skyscraper in the United States at the end of the 19th century, and New York has perhaps the {42} skyscraper of them all, the Empire State Building. The {43} beneath the streets of New York is rock, {44} enough to take the heaviest load without sinking, and is therefore well-suited to bearing the {45} of tall buildings.</p>`,
+  qs:[{o:["stages","steps","storeys","levels"]},{o:["first-rate","top-class","well-built","best-known"]},{o:["dirt","field","ground","soil"]},{o:["hard","stiff","forceful","powerful"]},{o:["weight","height","size","scale"]}]},
+ {part:2, title:"Scrabble", range:[46,50],
+  instr:"Choose the word or phrase which best fits each space in the text. Choose A, B, C or D.",
+  passage:`<h3>Scrabble</h3><p>Scrabble is the world's most popular word game. For its origins, we have to go back to the 1930s in the USA, when Alfred Butts, an architect, found himself out of {46}. He decided that there was a {47} for a board game based on words and {48} to design one. Eventually he made a {49} from it, in spite of the fact that his original {50} was only three cents a game.</p>`,
+  qs:[{o:["earning","work","income","job"]},{o:["market","purchase","commerce","sale"]},{o:["took up","set out","made for","got round"]},{o:["wealth","fund","cash","fortune"]},{o:["receipt","benefit","profit","allowance"]}]},
+ {part:2, title:"Sentences", range:[51,60],
+  instr:"Choose the word or phrase which best completes each sentence. Choose A, B, C or D.",
+  qs:[
+   {s:"Roger's manager ___ to make him stay late if he hadn't finished the work.",o:["insisted","warned","threatened","announced"]},
+   {s:"By the time he has finished his week's work, John has hardly ___ energy left for the weekend.",o:["any","much","no","same"]},
+   {s:"As the game ___ to a close, disappointed spectators started to leave.",o:["led","neared","approached","drew"]},
+   {s:"I don't remember ___ the front door when I left home this morning.",o:["to lock","locking","locked","to have locked"]},
+   {s:"I ___ to other people borrowing my books: they always forget to return them.",o:["disagree","avoid","dislike","object"]},
+   {s:"Andrew's attempts to get into the swimming team have not ___ with much success.",o:["associated","concluded","joined","met"]},
+   {s:"Although Harry had obviously read the newspaper article carefully, he didn't seem to have ___ the main point.",o:["grasped","clutched","clasped","gripped"]},
+   {s:"A lot of the views put forward in the documentary were open to ___.",o:["enquiry","query","question","wonder"]},
+   {s:"The new college ___ for the needs of students with a variety of learning backgrounds.",o:["deals","supplies","furnishes","caters"]},
+   {s:"I find the times of English meals very strange – I'm not used ___ dinner at 6pm.",o:["to have","to having","having","have"]}
+  ]}
+];
+
+const KEY = ("BBABC"+"BACBA"+"BACDA"+"ABCDA"+"DADDCCACBCAACDDDDBCC"+"CDCAA"+"BABDC"+"CADBDDACDB").split("");
+
+const BANDS = [
+ {min:0,max:17,cefr:"A1",name:"Beginner",general:"—",business:"—"},
+ {min:18,max:29,cefr:"A2",name:"Elementary",general:"KET (Key English Test)",business:"—"},
+ {min:30,max:39,cefr:"B1",name:"Intermediate",general:"PET (Preliminary English Test)",business:"BEC Preliminary"},
+ {min:40,max:47,cefr:"B2",name:"Upper intermediate",general:"FCE (First Certificate in English)",business:"BEC Vantage"},
+ {min:48,max:54,cefr:"C1",name:"Advanced",general:"CAE (Cambridge Advanced English)",business:"BEC Higher"},
+ {min:55,max:60,cefr:"C2",name:"Proficiency",general:"CPE (Cambridge Proficiency)",business:"—"}
+];
+
+// flatten questions with numbers
+const Q = [];
+SECTIONS.forEach((sec,si)=>sec.qs.forEach((q,i)=>{ q.n = sec.range[0]+i; q.sec = si; Q[q.n]=q; }));
+
+const STORE="placementTest.v1";
+function blank(){ return {name:"", email:"", group:"", answers:{}, sec:0, submitted:false, id:"", startedAt:0, finishedAt:0, sent:false}; }
+let state = blank();
+function save(){ try{ localStorage.setItem(STORE, JSON.stringify(state)); }catch(e){} }
+function load(){ try{ const s=JSON.parse(localStorage.getItem(STORE)||"null"); if(s&&s.answers) return s; }catch(e){} return null; }
+
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+
+function answeredCount(){ return Object.keys(state.answers).length; }
+function updateMeter(){
+  const c=answeredCount();
+  $("meter").style.width=(c/60*100)+"%";
+  $("count").textContent = state.submitted ? `Score: ${score()} / 60` : `${c} / 60 answered`;
+}
+function score(){ let s=0; for(let n=1;n<=60;n++) if(state.answers[n]===KEY[n-1]) s++; return s; }
+
+function renderTabs(){
+  $("tabs").innerHTML = SECTIONS.map((s,i)=>{
+    const done = s.qs.every(q=>state.answers[q.n]);
+    return `<button data-i="${i}" class="${done?"done":""}" aria-current="${i===state.sec}">${s.range[0]}–${s.range[1]} ${esc(s.title)}</button>`;
+  }).join("");
+  $("tabs").querySelectorAll("button").forEach(b=>b.onclick=()=>go(+b.dataset.i));
+  const cur=$("tabs").querySelector('[aria-current="true"]'); if(cur) cur.scrollIntoView({block:"nearest",inline:"nearest"});
+}
+
+function gapHTML(n){
+  const a=state.answers[n]; const txt = a ? Q[n].o[L.indexOf(a)] : "";
+  return `<button class="gap" data-goto="${n}" aria-label="Gap ${n}${txt?": "+esc(txt):""}"><span class="n">${n}</span>${esc(txt)||"&nbsp;"}</button>`;
+}
+
+function optClass(n,letter){
+  if(!state.submitted) return "";
+  const correct=KEY[n-1], mine=state.answers[n];
+  if(letter===correct) return "right";
+  if(letter===mine) return "wrong";
+  return "";
+}
+
+function renderSection(){
+  const sec=SECTIONS[state.sec];
+  let h=`<p class="part">Part ${sec.part}</p><div class="sec ${state.submitted?"review":""}"><h2>${esc(sec.title)}</h2><p class="instr">${sec.instr}</p>`;
+  if(sec.passage) h+=`<div class="passage" id="passage">${sec.passage.replace(/\{(\d+)\}/g,(m,n)=>gapHTML(+n))}</div>`;
+  sec.qs.forEach(q=>{
+    const n=q.n, a=state.answers[n];
+    const stem = q.s ? esc(q.s).replace("___","<strong>________</strong>") : (q.sign ? "Where can you see this notice?" : "Gap "+n);
+    h+=`<div class="q ${a?"answered":""}" id="q${n}" role="radiogroup" aria-labelledby="stem${n}">
+      <div class="qhead"><span class="qnum">${n}</span><span class="stem" id="stem${n}">${stem}</span></div>`;
+    if(q.sign) h+=`<div class="sign ${q.caps?"caps":""}">${q.sign}</div>`;
+    h+=`<div class="opts">`+q.o.map((t,i)=>{
+      const id=`q${n}${L[i]}`;
+      return `<div class="opt ${optClass(n,L[i])}"><input type="radio" name="q${n}" id="${id}" value="${L[i]}" ${a===L[i]?"checked":""} ${state.submitted?"disabled":""}><label for="${id}"><span class="l">${L[i]}</span>${esc(t)}</label></div>`;
+    }).join("")+`</div></div>`;
+  });
+  h+=`</div>`;
+  $("secHost").innerHTML=h;
+
+  $("secHost").querySelectorAll("input[type=radio]").forEach(r=>r.onchange=()=>{
+    const n=+r.name.slice(1); state.answers[n]=r.value; save();
+    document.getElementById("q"+n).classList.add("answered");
+    const g=document.querySelector(`.gap[data-goto="${n}"]`); if(g) g.outerHTML=gapHTML(n), bindGaps();
+    updateMeter(); renderTabs();
+  });
+  bindGaps();
+
+  $("prevBtn").disabled = state.sec===0;
+  const last = state.sec===SECTIONS.length-1;
+  $("nextBtn").textContent = state.submitted ? (last?"Back to results":"Next section") : (last?"Finish and see my result":"Next section");
+}
+function bindGaps(){
+  document.querySelectorAll(".gap").forEach(g=>g.onclick=()=>{
+    const el=document.getElementById("q"+g.dataset.goto); el.scrollIntoView({behavior:"smooth",block:"center"});
+    const first=el.querySelector("input:checked")||el.querySelector("input"); if(first && !first.disabled) first.focus({preventScroll:true});
+  });
+}
+
+function go(i){ state.sec=i; save(); show("test"); renderTabs(); renderSection(); window.scrollTo(0,0); }
+
+function show(v){
+  $("startView").hidden = v!=="start";
+  $("testView").hidden = v!=="test";
+  $("resultView").hidden = v!=="result";
+  $("adminView").hidden = v!=="admin";
+}
+
+function finish(){
+  const missing = 60-answeredCount();
+  if(missing>0 && !confirm(`You have ${missing} unanswered question${missing>1?"s":""}. Unanswered questions score zero. Finish anyway?`)) return;
+  state.submitted=true; state.finishedAt=Date.now(); save(); renderResult();
+}
+
+/* ---------- sending the result to the Google Sheet ---------- */
+const apiReady = () => /^https:\/\/script\.google(usercontent)?\.com\//.test(API_URL);
+
+function answerString(){ let s=""; for(let n=1;n<=60;n++) s += state.answers[n]||"-"; return s; }
+
+function setSent(kind,msg,retry){
+  const el=$("sentBox"); if(!el) return;
+  el.className="sent "+kind;
+  el.innerHTML=`<span>${msg}</span>`+(retry?`<button class="btn" id="retryBtn">Try again</button>`:"");
+  if(retry) $("retryBtn").onclick=sendResult;
+}
+
+async function sendResult(){
+  if(state.sent){ setSent("ok","✓ Your result has been sent to your teacher."); return; }
+  if(!apiReady()){ setSent("bad","Results are not connected yet (the teacher has not added the web app address)."); return; }
+  setSent("wait","Sending your result to your teacher…");
+  const payload={
+    id:state.id, name:state.name, email:state.email, group:state.group,
+    answers:answerString(), startedAt:state.startedAt, finishedAt:state.finishedAt,
+    minutes: Math.round((state.finishedAt-state.startedAt)/60000),
+    clientScore: score(), userAgent: navigator.userAgent.slice(0,200)
+  };
+  try{
+    // text/plain avoids a CORS preflight, which Apps Script cannot answer
+    const r=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload),redirect:"follow"});
+    const j=await r.json();
+    if(!j.ok) throw new Error(j.error||"Server error");
+    state.sent=true; save();
+    setSent("ok","✓ Your result has been sent to your teacher.");
+  }catch(e){
+    setSent("bad","Your result could not be sent. Check your internet connection and try again.",true);
+  }
+}
+
+function renderResult(){
+  const s=score(); const band=BANDS.find(b=>s>=b.min&&s<=b.max);
+  const p1=[...Array(40)].reduce((a,_,i)=>a+(state.answers[i+1]===KEY[i]?1:0),0);
+  const p2=s-p1;
+  const date=new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("resultView").innerHTML=`<div class="result">
+    <p class="part">${state.name?esc(state.name)+", ":""}${date}</p>
+    <div id="sentBox" class="sent wait" role="status" aria-live="polite"></div>
+    <h2 style="font-family:var(--read);font-size:2rem;margin:0;color:var(--ink)">Your result</h2>
+    <div class="level"><span class="cefr">${band.cefr}</span>
+      <span class="score"><b>${s}</b> / 60 correct<br><span style="color:var(--muted)">${band.name} · Part 1: ${p1}/40 · Part 2: ${p2}/20</span></span></div>
+    <p class="note">This is an approximate level to help choose the right course. A teacher may confirm it with a short speaking or writing task.</p>
+    <div class="scale"><table>
+      <thead><tr><th>Score</th><th>Level</th><th>General English exam</th><th>Business English exam</th></tr></thead>
+      <tbody>${BANDS.map(b=>`<tr class="${b===band?"me":""}"><td>${b.min}–${b.max}</td><td>${b.cefr} ${b.name}</td><td>${b.general}</td><td>${b.business}</td></tr>`).join("")}</tbody>
+    </table></div>
+    <div class="row">
+      <button class="btn" id="reviewBtn">Review my answers</button>
+      <button class="btn ghost" id="printBtn">Print result</button>
+      <button class="btn ghost" id="restartBtn">Start a new test</button>
+    </div></div>`;
+  show("result"); updateMeter(); window.scrollTo(0,0);
+  state.sent ? setSent("ok","✓ Your result has been sent to your teacher.") : sendResult();
+  $("reviewBtn").onclick=()=>go(0);
+  $("printBtn").onclick=()=>window.print();
+  $("restartBtn").onclick=()=>{ if(confirm("Clear all answers and start again?")){ state=blank(); save(); ["name","email","group"].forEach(k=>$(k).value=""); $("resumeBtn").hidden=true; updateMeter(); show("start"); } };
+}
+
+$("beginBtn").onclick=()=>{
+  const name=$("name").value.trim();
+  if(!name){ $("startErr").hidden=false; $("name").focus(); return; }
+  $("startErr").hidden=true;
+  state=blank();
+  Object.assign(state,{name, email:$("email").value.trim(), group:$("group").value.trim(),
+    id: Date.now().toString(36)+Math.random().toString(36).slice(2,8), startedAt: Date.now()});
+  save(); updateMeter(); go(0);
+};
+
+/* ============================================================
+   ADMIN PAGE — open the site with ?admin at the end of the address
+   ============================================================ */
+const ADMIN_KEY="placementTest.adminKey";
+let adm={rows:[], sheetUrl:"", sort:"time", dir:-1, q:"", level:"", group:"", open:null};
+
+async function api(body){
+  const r=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(body),redirect:"follow"});
+  const j=await r.json(); if(!j.ok) throw new Error(j.error||"Server error"); return j;
+}
+function getKey(){ try{ return sessionStorage.getItem(ADMIN_KEY)||""; }catch(e){ return adm.key||""; } }
+function setKey(k){ adm.key=k; try{ k?sessionStorage.setItem(ADMIN_KEY,k):sessionStorage.removeItem(ADMIN_KEY); }catch(e){} }
+
+function adminLogin(msg){
+  $("adminView").innerHTML=`<h2>Teacher login</h2>
+    <p class="instr">Enter the admin password you set in the Apps Script to see students' results.</p>
+    ${apiReady()?"":`<p class="err">The web app address has not been added yet. Open index.html and paste it into API_URL.</p>`}
+    <form id="loginForm">
+      <label class="field" for="pw">Password</label>
+      <input type="password" id="pw" autocomplete="current-password" style="width:100%;max-width:380px;padding:12px 14px;border:1px solid var(--line);border-radius:6px;background:var(--panel)">
+      ${msg?`<p class="err">${esc(msg)}</p>`:""}
+      <div class="row"><button class="btn" type="submit">Show results</button></div>
+    </form>`;
+  $("pw").focus();
+  $("loginForm").onsubmit=e=>{ e.preventDefault(); setKey($("pw").value); loadAdmin(); };
+}
+
+async function loadAdmin(){
+  const key=getKey(); if(!key) return adminLogin();
+  $("adminView").innerHTML=`<h2>Placement results</h2><p class="instr">Loading…</p>`;
+  try{
+    const j=await api({action:"list",key});
+    adm.rows=j.rows; adm.sheetUrl=j.sheetUrl||""; renderAdmin();
+  }catch(e){
+    const bad=/password/i.test(e.message);
+    if(bad) setKey("");
+    adminLogin(bad?"Wrong password.":"Could not reach the results sheet: "+e.message);
+  }
+}
+
+function filtered(){
+  const q=adm.q.toLowerCase();
+  let r=adm.rows.filter(x=>(!adm.level||x.cefr===adm.level)&&(!adm.group||x.group===adm.group)&&
+    (!q||[x.name,x.email,x.group].join(" ").toLowerCase().includes(q)));
+  const k=adm.sort;
+  r.sort((a,b)=>{ const A=a[k],B=b[k]; return (typeof A==="number"&&typeof B==="number"?A-B:String(A).localeCompare(String(B)))*adm.dir; });
+  return r;
+}
+const fmtDate=t=>new Date(t).toLocaleString("en-GB",{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"});
+
+function renderAdmin(){
+  const rows=filtered(), all=adm.rows;
+  const groups=[...new Set(all.map(x=>x.group).filter(Boolean))].sort();
+  const avg=rows.length?(rows.reduce((a,x)=>a+x.score,0)/rows.length).toFixed(1):"–";
+  const cols=[["time","Date"],["name","Name"],["email","Contact"],["group","Group"],["score","Score"],["cefr","Level"],["p1","Part 1"],["p2","Part 2"],["minutes","Mins"]];
+  const arrow=k=>adm.sort===k?(adm.dir>0?" ▲":" ▼"):"";
+  $("adminView").innerHTML=`
+    <h2>Placement results</h2>
+    <p class="instr">${all.length} test${all.length===1?"":"s"} submitted. Click a student to see their answers.</p>
+    <div class="row" style="margin-top:0">
+      <button class="btn" id="refreshBtn">Refresh</button>
+      <button class="btn ghost" id="csvBtn">Download CSV</button>
+      ${adm.sheetUrl?`<a class="btn ghost" href="${esc(adm.sheetUrl)}" target="_blank" rel="noopener" style="text-decoration:none">Open Google Sheet</a>`:""}
+      <button class="btn ghost" id="logoutBtn">Log out</button>
+    </div>
+    <div class="stats">
+      <div><b>${rows.length}</b><small>shown</small></div>
+      <div><b>${avg}</b><small>average /60</small></div>
+      ${BANDS.map(b=>`<div><b>${rows.filter(x=>x.cefr===b.cefr).length}</b><small>${b.cefr}</small></div>`).join("")}
+    </div>
+    <div class="bar2">
+      <input type="search" id="fq" placeholder="Search name, contact or group" value="${esc(adm.q)}" aria-label="Search">
+      <select id="flevel" aria-label="Level"><option value="">All levels</option>${BANDS.map(b=>`<option ${adm.level===b.cefr?"selected":""}>${b.cefr}</option>`).join("")}</select>
+      <select id="fgroup" aria-label="Group"><option value="">All groups</option>${groups.map(g=>`<option ${adm.group===g?"selected":""}>${esc(g)}</option>`).join("")}</select>
+    </div>
+    <div class="results"><table>
+      <thead><tr>${cols.map(([k,t])=>`<th><button data-k="${k}">${t}${arrow(k)}</button></th>`).join("")}</tr></thead>
+      <tbody>${rows.length?rows.map(x=>`
+        <tr data-id="${esc(x.id)}" tabindex="0">
+          <td>${fmtDate(x.time)}</td><td><b>${esc(x.name)}</b></td><td>${esc(x.email)}</td><td>${esc(x.group)}</td>
+          <td class="num">${x.score}</td><td><span class="pill">${esc(x.cefr)}</span></td>
+          <td class="num">${x.p1}/40</td><td class="num">${x.p2}/20</td><td class="num">${x.minutes??""}</td>
+        </tr>${adm.open===x.id?detailRow(x,cols.length):""}`).join("")
+        :`<tr><td colspan="${cols.length}" style="color:var(--muted);text-align:center;padding:28px">No results yet.</td></tr>`}</tbody>
+    </table></div>`;
+
+  $("refreshBtn").onclick=loadAdmin;
+  $("logoutBtn").onclick=()=>{ setKey(""); adminLogin(); };
+  $("csvBtn").onclick=()=>downloadCSV(rows);
+  $("fq").oninput=e=>{ adm.q=e.target.value; const p=e.target.selectionStart; renderAdmin(); $("fq").focus(); $("fq").setSelectionRange(p,p); };
+  $("flevel").onchange=e=>{ adm.level=e.target.value; renderAdmin(); };
+  $("fgroup").onchange=e=>{ adm.group=e.target.value; renderAdmin(); };
+  document.querySelectorAll(".results th button").forEach(b=>b.onclick=()=>{
+    const k=b.dataset.k; adm.dir = adm.sort===k ? -adm.dir : (k==="name"||k==="group"||k==="email"?1:-1); adm.sort=k; renderAdmin();
+  });
+  document.querySelectorAll(".results tbody tr[data-id]").forEach(tr=>{
+    const t=()=>{ adm.open = adm.open===tr.dataset.id?null:tr.dataset.id; renderAdmin(); };
+    tr.onclick=t; tr.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); t(); } };
+  });
+  const del=$("delBtn"); if(del) del.onclick=async()=>{
+    const x=adm.rows.find(r=>r.id===adm.open);
+    if(!confirm(`Delete ${x.name}'s result from the sheet? This cannot be undone.`)) return;
+    try{ await api({action:"delete",key:getKey(),id:x.id}); adm.open=null; loadAdmin(); }catch(e){ alert("Could not delete: "+e.message); }
+  };
+}
+
+function detailRow(x,span){
+  const a=String(x.answers||"").padEnd(60,"-");
+  const cells=[...Array(60)].map((_,i)=>{
+    const mine=a[i], ok=KEY[i];
+    const cls= mine==="-"?"b":(mine===ok?"r":"w");
+    const tip= mine==="-"?`Q${i+1}: no answer (correct ${ok})`:(mine===ok?`Q${i+1}: ${mine} ✓`:`Q${i+1}: chose ${mine}, correct ${ok}`);
+    return `<span class="${cls}" title="${tip}">${i+1} ${mine==="-"?"–":mine}${cls==="w"?"→"+ok:""}</span>`;
+  }).join("");
+  const wrongBySec=SECTIONS.map(s=>{ let w=0; for(let n=s.range[0];n<=s.range[1];n++) if(a[n-1]!==KEY[n-1]) w++; return `${s.range[0]}–${s.range[1]} ${esc(s.title)}: ${(s.range[1]-s.range[0]+1)-w}/${s.range[1]-s.range[0]+1}`; }).join(" · ");
+  return `<tr class="detail"><td colspan="${span}">
+    <p style="margin:4px 0 8px"><b>${esc(x.name)}</b> · ${x.score}/60 · ${esc(x.cefr)} ${esc(x.level)}${x.minutes!=null?` · ${x.minutes} min`:""}</p>
+    <p class="note" style="margin:0 0 8px">${wrongBySec}</p>
+    <div class="grid60">${cells}</div>
+    <p class="note" style="margin:8px 0">Green = correct · red = wrong (with the right answer) · dashed = no answer</p>
+    <button class="btn ghost" id="delBtn" style="padding:6px 14px;font-size:.9rem">Delete this result</button>
+  </td></tr>`;
+}
+
+function downloadCSV(rows){
+  const head=["Date","Name","Contact","Group","Score","Level","Part 1","Part 2","Minutes",...Array.from({length:60},(_,i)=>"Q"+(i+1))];
+  const q=v=>`"${String(v??"").replace(/"/g,'""')}"`;
+  const lines=[head.map(q).join(",")].concat(rows.map(x=>{
+    const a=String(x.answers||"").padEnd(60,"-").split("");
+    return [new Date(x.time).toISOString(),x.name,x.email,x.group,x.score,x.cefr,x.p1,x.p2,x.minutes,...a].map(q).join(",");
+  }));
+  const blob=new Blob(["﻿"+lines.join("\r\n")],{type:"text/csv"});
+  const url=URL.createObjectURL(blob), link=document.createElement("a");
+  link.href=url; link.download=`placement-results-${new Date().toISOString().slice(0,10)}.csv`; link.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+$("resumeBtn").onclick=()=>{ if(state.submitted) renderResult(); else go(state.sec); };
+$("prevBtn").onclick=()=>go(Math.max(0,state.sec-1));
+$("nextBtn").onclick=()=>{
+  if(state.sec<SECTIONS.length-1) return go(state.sec+1);
+  state.submitted ? renderResult() : finish();
+};
+
+// init
+const isAdmin = /(^|[?&])admin\b/.test(location.search.slice(1)) || location.hash==="#admin";
+if(isAdmin){
+  document.title="Placement results – Admin"; document.body.classList.add("is-admin");
+  $("meter").parentElement.hidden=true; $("count").hidden=true;
+  document.querySelector(".bar h1").textContent="Placement test · Admin";
+  show("admin"); loadAdmin();
+}else{
+  const saved=load();
+  if(saved && (Object.keys(saved.answers).length || saved.submitted)){
+    state=Object.assign(blank(),saved);
+    $("name").value=state.name||""; $("email").value=state.email||""; $("group").value=state.group||"";
+    $("resumeBtn").hidden=false;
+    $("resumeBtn").textContent = state.submitted ? "See my last result" : "Continue where I left off";
+  }
+  updateMeter(); show("start");
+}
+</script>
+</body>
+</html>
